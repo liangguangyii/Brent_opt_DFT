@@ -111,26 +111,29 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
     a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a0, b0, xguess, y0, xguess, y0, xguess, y0, fun_p, 0.0, 0.0)
 
     with open("Brent.out", "w") as output:
-        output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
-        #* add the flush() to make sure the output is written to the file immediately
-        output.flush()
-        print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
-
-        for i in range(Maxloop):
-            a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
-            
-            icount += 1
+        with open("output.txt", "w") as finout:
             output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
-            print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
+            finout.write(f"Iteration:\t{icount}\tx:\t{round(x, 4):.4f}\ty:\t{fx:.12f}\n")
+            finout.flush()
 
-            # #debug
-            # if i == 3:
-            #     break
+            for i in range(Maxloop):
+                a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
+                
+                icount += 1
+                output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
+                #* add the flush() to make sure the output is written to the file immediately
+                output.flush()
+                finout.write(f"Iteration:\t{icount}\tx:\t{round(x, 4):.4f}\ty:\t{fx:.12f}\n")
+                finout.flush()
 
-            if (abs(b - a) < tol):
-                break
+                # #debug
+                # if i == 3:
+                #     break
+
+                if (abs(b - a) < tol):
+                    break
             
     return x, icount
 
@@ -158,21 +161,24 @@ def brentMethod_re(fun_p, filename="Brent.out"):
 
     icount = 0
     with open("Brent.out", "w") as output:
-        output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
-        #* add the flush() to make sure the output is written to the file immediately
-        output.flush()
-        print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
-
-        for i in range(Maxloop):
-            a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
-            
-            icount += 1
+        with open("output.txt", "w") as finout:
             output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
-            print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
+            finout.write(f"Iteration:\t{icount}\tx:\t{round(x, 4):.4f}\ty:\t{fx:.12f}\n")
+            finout.flush()
 
-            if (abs(b - a) < tol):
-                break
+            for i in range(Maxloop):
+                a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
+                
+                icount += 1
+                output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
+                #* add the flush() to make sure the output is written to the file immediately
+                output.flush()
+                finout.write(f"Iteration:\t{icount}\tx:\t{round(x, 4):.4f}\ty:\t{fx:.12f}\n")
+                finout.flush()
+
+                if (abs(b - a) < tol):
+                    break
             
     return x, icount
