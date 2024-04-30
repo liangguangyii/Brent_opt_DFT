@@ -125,9 +125,9 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
             output.flush()
             print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
 
-            #debug
-            if i == 3:
-                break
+            # #debug
+            # if i == 3:
+            #     break
 
             if (abs(b - a) < tol):
                 break

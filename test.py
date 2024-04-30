@@ -1,15 +1,16 @@
-from globalVar import *
+from globalVar import xmin, xmax, xguess, tol, cleanBool, restartBool
 from brent import *
 from fileIO import *
 from function import *
 
+if restartBool:
+    xmin, icount = brentMethod_re(funJ2)
+else:
+    #Clean the files
+    if cleanBool:
+        fileClean()
 
-#Clean the files
-if cleanBool:
-    fileClean()
-    os.system("rm fileList.txt")
-
-xmin, icount = brentMethod(xmin, xguess, xmax, funJ2, tol)
+    xmin, icount = brentMethod(xmin, xguess, xmax, funJ2, tol)
 
 #Save all the file name into fileList.txt
 with open ("fileList.txt","w") as fileList:
