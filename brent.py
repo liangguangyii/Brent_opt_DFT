@@ -103,7 +103,7 @@ def brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold):
 @return icount: the number of iterations
 '''
 def brentMethod(a0, b0, xguess, fun_p, tol):
-    Maxloop = 100
+    Maxloop = 1000
 
     icount = 0
     #! evaluate the function at the initial guess
@@ -111,14 +111,55 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
     a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a0, b0, xguess, y0, xguess, y0, xguess, y0, fun_p, 0.0, 0.0)
 
     with open("Brent.out", "w") as output:
-        output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\n")
+        output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
+        #* add the flush() to make sure the output is written to the file immediately
+        output.flush()
         print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
 
         for i in range(Maxloop):
             a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
             
             icount += 1
-            output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\n")
+            output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
+            #* add the flush() to make sure the output is written to the file immediately
+            output.flush()
+            print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
+
+            if (abs(b - a) < tol):
+                break
+            
+    return x, icount
+
+'''
+@breif: brent method with restart
+
+@param filename: the file name to restart
+
+@return xmin: the minimum point
+@return icount: the number of iterations
+'''
+
+def brentMethod_re(filename="Brent.out"):
+    Maxloop = 1000
+
+    with open("Brent.out", "r") as input:
+        for line in input:
+            tmpline = line.strip().split()
+            tmpline = [float(i) for i in tmpline]
+            a, b, v, fv, w, fw, x, fx, dx, dxold, tol = tmpline
+        
+    print(f"restart from {filename}, with parameters:\n")
+    print(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\ttol:{tol}\n")
+
+    with open("Brent.out", "w") as output:
+        output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\t{tol}\n")
+        print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
+
+        for i in range(Maxloop):
+            a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
+            
+            icount += 1
+            output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
             print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
