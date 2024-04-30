@@ -35,48 +35,97 @@ def findSpinIndex(filename = "template.gjf"):
 
     return iopIndex, spinIndex
 
-'''
-@brief: generate gjf with N+1, N, N-1 spins in different IOp(3/107, 3/108) values (int(wpara*1000):05 + 0:05 format)
+# '''
+# @brief: generate gjf with N+1, N, N-1 spins in different IOp(3/107, 3/108) values (int(wpara*1000):05 + 0:05 format)
 
-@param Nspin: "charge spin" of N
-@param Naspin: "charge spin" of N+1
-@param Nmspin: "charge spin" of N-1
-@param wpara: the parameter for the IOp(3/107, 3/108) value
-@param filename: the template file name, default is "template.gjf"
+# @param Nspin: "charge spin" of N
+# @param Naspin: "charge spin" of N+1
+# @param Nmspin: "charge spin" of N-1
+# @param wpara: the parameter for the IOp(3/107, 3/108) value
+# @param filename: the template file name, default is "template.gjf"
 
 
-@return: void, three gjf files: N.gjf, N+1.gjf, N-1.gjf
-'''
+# @return: void, three gjf files: N.gjf, N+1.gjf, N-1.gjf
+# '''
 #! here I use f"{int(wpara*10000):05}" to convert the float to string, by adding 5 zeros
 #! it's not good, I suggest to use round(x,4) functon instead
 
-def g16input(Nspin, Naspin, Nmspin, wpara, filename = "template.gjf"):
+# def g16input(Nspin, Naspin, Nmspin, wpara, filename = "template.gjf"):
+
+#     iopIndex, spinIndex = findSpinIndex()
+
+#     with open("N.gjf", "w") as Ngjf, open("N+1.gjf", "w") as Nagjf, open("N-1.gjf", "w") as Nmgjf:
+#         with open(filename, "r") as gjf:
+#             icount = 0
+#             for line in gjf:
+#                 icount += 1
+#                 if icount == iopIndex:
+#                     tempIop = line.strip()  #*remove the newline character
+#                     wpara = round(wpara, 4)    #*round the float to 4 decimal places
+#                     str_wpara = f"{int(wpara*10000):05}"   #*convert the float to string, by adding 5 zeros
+#                     str_iop = str_wpara + f"{0:05}"
+                    
+#                     Ngjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+#                     Nagjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+#                     Nmgjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+
+#                 elif icount == spinIndex:
+#                     Ngjf.write(f"{Nspin}\n")
+#                     Nagjf.write(f"{Naspin}\n")
+#                     Nmgjf.write(f"{Nmspin}\n")
+#                 else:
+#                     Ngjf.write(line)
+#                     Nagjf.write(line)
+#                     Nmgjf.write(line)
+
+'''
+@brief: generate gjf with series of spins in different IOp(3/107, 3/108) values (int(wpara*1000):05 + 0:05 format)
+
+@param chargeList: the number of eletron corresponding to the template file
+@param chargeSpinList: the charge spin list [str1, str2, ...]
+@param wpara: the parameter for the IOp(3/107, 3/108) value
+@param filename: the template file name, default is "template.gjf"
+
+@return: fileList: the list of the gjf files
+@return: void, series of gjf files
+'''
+
+def g16input(chargeList, chargeSpinList, wpara, filename = "template.gjf"):
+    fileList = []
 
     iopIndex, spinIndex = findSpinIndex()
 
-    with open("N.gjf", "w") as Ngjf, open("N+1.gjf", "w") as Nagjf, open("N-1.gjf", "w") as Nmgjf:
-        with open(filename, "r") as gjf:
-            icount = 0
-            for line in gjf:
-                icount += 1
-                if icount == iopIndex:
-                    tempIop = line.strip()  #*remove the newline character
-                    wpara = round(wpara, 4)    #*round the float to 4 decimal places
-                    str_wpara = f"{int(wpara*10000):05}"   #*convert the float to string, by adding 5 zeros
-                    str_iop = str_wpara + f"{0:05}"
-                    
-                    Ngjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
-                    Nagjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
-                    Nmgjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+    for i in range(len(chargeSpinList)):
+        icount = 0
+        #* generate the filename
+        if chargeList[i] == 0:
+            tmpstr = "N.gjf"
+        elif chargeList[i] > 0:
+            tmpstr = f"N+{chargeList[i]}.gjf"
+        else:
+            tmpstr = f"N-{abs(chargeList[i])}.gjf"
 
-                elif icount == spinIndex:
-                    Ngjf.write(f"{Nspin}\n")
-                    Nagjf.write(f"{Naspin}\n")
-                    Nmgjf.write(f"{Nmspin}\n")
-                else:
-                    Ngjf.write(line)
-                    Nagjf.write(line)
-                    Nmgjf.write(line)
+
+        with open(filename, "r") as gjf:
+            with open(tmpstr, "w") as Ngjf:
+                for line in gjf:
+                    icount += 1
+                    if icount == iopIndex:
+                        tempIop = line.strip()  #*remove the newline character
+                        wpara = round(wpara, 4)    #*round the float to 4 decimal places
+                        str_wpara = f"{int(wpara*10000):05}"   #*convert the float to string, by adding 5 zeros
+                        str_iop = str_wpara + f"{0:05}"
+                        
+                        Ngjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+
+                    elif icount == spinIndex:
+                        Ngjf.write(f"{chargeSpinList[i]}\n")
+                    else:
+                        Ngjf.write(line)
+        
+        fileList.append(tmpstr)
+    
+    return fileList
 
 
 '''
