@@ -1,3 +1,4 @@
+from globalVar import oldchkBool, UDFT
 import os
 
 '''
@@ -91,6 +92,9 @@ def findSpinIndex(filename = "template.gjf"):
 '''
 
 def g16input(chargeList, chargeSpinList, wpara, filename = "template.gjf"):
+    global oldchkBool
+
+
     fileList = []
 
     iopIndex, spinIndex = findSpinIndex()
@@ -110,13 +114,30 @@ def g16input(chargeList, chargeSpinList, wpara, filename = "template.gjf"):
             with open(tmpstr, "w") as Ngjf:
                 for line in gjf:
                     icount += 1
+
+                    #* modify the iop line
                     if icount == iopIndex:
                         tempIop = line.strip()  #*remove the newline character
                         wpara = round(wpara, 4)    #*round the float to 4 decimal places
                         str_wpara = f"{int(wpara*10000):05}"   #*convert the float to string, by adding 5 zeros
                         str_iop = str_wpara + f"{0:05}"
                         
-                        Ngjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+                        if UDFT[i]:
+                            #* split the tempIop by "/", functional is the last element on the left side
+                            tempIop1 = tempIop.split("/")
+                            #* split the functional by " ", functional is the last element
+                            tempIop2 = tempIop1[0].split()
+                            tempIop2[-1] = "U" + tempIop2[-1]
+                            
+                            tmpIop = " ".join(tempIop2) + "/" + tempIop1[1]
+                            Ngjf.write(f"{tmpIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+                        else:
+                            Ngjf.write(f"{tempIop} IOp(3/107={str_iop},3/108={str_iop})\n")
+                    
+                    #* if oldchkBool is True, then add the oldchk for each gjf file(by default, is N.chk, N+1.chk, N-1.chk ...)
+                    #* otherwise, oldchk is the same with template.gjf
+                    elif "oldchk" in line and oldchkBool:
+                        Ngjf.write(f"%oldchk={tmpstr[:-4]}.chk\n")
 
                     elif icount == spinIndex:
                         Ngjf.write(f"{chargeSpinList[i]}\n")
