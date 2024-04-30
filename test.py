@@ -9,7 +9,7 @@ if cleanBool:
     fileClean()
     os.system("rm fileList.txt")
 
-xmin, icount = brentMethod(0.05, 0.325, 0.6, funJ2, 1.0e-3)
+xmin, icount = brentMethod(xmin, xguess, xmax, funJ2, tol)
 
 #Save all the file name into fileList.txt
 with open ("fileList.txt","w") as fileList:
