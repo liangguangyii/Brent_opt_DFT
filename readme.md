@@ -15,15 +15,43 @@ The code will generate a series of documents with the name of corresponding $\om
 And `globalVar.py` reads all input parameters (they are all global parameters) from `input`:
 
 ```
-N:      0       1
-N+1:    -1      2
-N-1:    1       2
+oldchk
+orbit:          0,1
+charge spin start
+1   -1   2  U
+-1  1   2   U
+0   0   1
+charge spin end
 xmin:           0.05
 xmax:           0.6
 xguess:         0.325
-tolerance:      0.0001
+tolerance:      0.001
 clean
+restart
 ```
+
+Here `oldchk`, `clean`, and `U` in charge spin code area are optional function.
+
+`oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
+
+`orbit`: we could tuned MULTIPLE orbitals, by specifying `orbit:    a,b     f,g     ..      x,y`, that will generate gjf files `N+i.gjf`, where i from a to b, f to g, ..., x to y, and they are sorted automatic, besides, duplicate files are removed in `globalVar.py`. **BE NOTICE that N orbits with continous indies mean that N+1 gjf fiels are needed**
+
+For example, `orbit: 0,1` $\rightarrow$ `N-1.gjf` `N.gjf` `N+1.gjf`, and `orbits: 0,1 4,5`
+$\rightarrow$ `N-1.gjf` `N.gjf` `N+1.gjf` `N+3.gjf` `N+4.gjf` `N+5.gjf`.
+
+`charge spin start` and `charge spin end` are the start and end of charge spin area.
+```
+charge spin start
+electronNumber  charge  spinMultiplicity    U(optional)
+charge spin end
+```
+
+if `U` is specified, the U method will be used in Gaussian16 for the corresponding `N+i.gjf`.
+
+`restart` will restart the optimization from the last point of the last optimization, it will read the parameters of the last iteration from `Brent.out`.
+
+`clean` will remove all the backup documents, from `fileList.txt`, it only works when `restart` is not specified.
+
 
 Where `N:`, `N+1:`, `N-1:` are the charge+spin multiplicity of systems with corresped electron number. ":" COULD NOT BE OMITTED!
 
