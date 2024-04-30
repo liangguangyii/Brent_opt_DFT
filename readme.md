@@ -12,6 +12,8 @@ $$
 
 The code will generate a series of documents with the name of corresponding $\omega$, all output documents are enclosed in these documents. And the result of each iteration of brent method are both printed and writen into `Brent.out`.
 
+Human-friendly output are shown in `output.txt`.
+
 And `globalVar.py` reads all input parameters (they are all global parameters) from `input`:
 
 ```
