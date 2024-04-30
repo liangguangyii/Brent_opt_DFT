@@ -97,6 +97,7 @@ def calIP(wpara):
 def funJ2(wpara):
     global wparaList, J2List, JList, chargeList, chargeSpinList
     if round(wpara, 4) in wparaList:
+        print(f"f({round(wpara, 4)}) Already calculated.")
         #print(f"Already calculated.{round(wpara, 4)} {wparaList}")
         return J2List[wparaList.index(round(wpara, 4))]
     J, J2 = calIP(wpara)
