@@ -125,6 +125,10 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
             output.flush()
             print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
 
+            #debug
+            if i == 3:
+                break
+
             if (abs(b - a) < tol):
                 break
             
@@ -133,13 +137,14 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
 '''
 @breif: brent method with restart
 
-@param filename: the file name to restart
+@param fun_p: the function to be minimized
+@param filename: the file name to restart, default is "Brent.out"
 
 @return xmin: the minimum point
 @return icount: the number of iterations
 '''
 
-def brentMethod_re(filename="Brent.out"):
+def brentMethod_re(fun_p, filename="Brent.out"):
     Maxloop = 1000
 
     with open("Brent.out", "r") as input:
@@ -151,15 +156,18 @@ def brentMethod_re(filename="Brent.out"):
     print(f"restart from {filename}, with parameters:\n")
     print(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\ttol:{tol}\n")
 
+    icount = 0
     with open("Brent.out", "w") as output:
-        output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\t{tol}\n")
+        output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
+        #* add the flush() to make sure the output is written to the file immediately
+        output.flush()
         print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
 
         for i in range(Maxloop):
             a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a, b, v, fv, w, fw, x, fx, fun_p, dx, dxold)
             
             icount += 1
-            output.write(f"a:{a}\tb:{b}\tv:{v}\tfv:{fv}\tw:{w}\tfw:{fw}\tx:{x}\tfx:{fx}\t{tol}\n")
+            output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
             print(f"Iteration:\t{icount}\tx:\t{x:.5f}\ty:\t{fx:.12f}")
