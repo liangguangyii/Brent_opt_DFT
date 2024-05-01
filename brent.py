@@ -111,7 +111,7 @@ def brentMethod(a0, b0, xguess, fun_p, tol):
     a, b, v, fv, w, fw, x, fx, dx, dxold = brent(a0, b0, xguess, y0, xguess, y0, xguess, y0, fun_p, 0.0, 0.0)
 
     with open("Brent.out", "w") as output:
-        with open("output.txt", "w") as finout:
+        with open("output.txt", "a") as finout:
             output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
@@ -161,7 +161,7 @@ def brentMethod_re(fun_p, filename="Brent.out"):
 
     icount = 0
     with open("Brent.out", "w") as output:
-        with open("output.txt", "w") as finout:
+        with open("output.txt", "a") as finout:
             output.write(f"{a}\t{b}\t{v}\t{fv}\t{w}\t{fw}\t{x}\t{fx}\t{dx}\t{dxold}\t{tol}\n")
             #* add the flush() to make sure the output is written to the file immediately
             output.flush()
