@@ -10,6 +10,8 @@ else:
     if cleanBool:
         fileClean()
 
+    #* clean the output file if restart is not specified
+    os.system("rm output.txt")
     xmin, icount = brentMethod(xmin, xguess, xmax, funJ2, tol)
 
 #Save all the file name into fileList.txt
