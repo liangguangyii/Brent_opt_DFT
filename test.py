@@ -12,7 +12,8 @@ else:
 
     #* clean the output file if restart is not specified
     os.system("rm output.txt")
-    xmin, icount = brentMethod(xmin, xguess, xmax, funJ2, tol)
+    os.system("rm Brent.out")
+    xmin, icount = brentMethod(xmin, xmax, xguess, funJ2, tol)
 
 #Save all the file name into fileList.txt
 with open ("fileList.txt","w") as fileList:
