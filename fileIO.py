@@ -129,9 +129,9 @@ def g16input(chargeList, chargeSpinList, wpara, filename = "template.gjf"):
                             tempIop2 = tempIop1[0].split()
                             tempIop2[-1] = "U" + tempIop2[-1]
                             #* sometimes there will be more than one "/", for example, Iop options
-                            ttempstr = ""
-                            for j in range(1,len(tempIop1)):
-                                ttempstr += tempIop1[j] + "/"
+                            
+                            ttempstr = "/".join(tempIop1[1:])
+
                             tmpIop = " ".join(tempIop2) + "/" + ttempstr
 
                             Ngjf.write(f"{tmpIop} IOp(3/107={str_iop},3/108={str_iop})\n")

@@ -106,6 +106,25 @@ def funJ2(wpara):
     J2List.append(J2)
     return J2
 
+
+'''
+@brief: point to the function calIP, only return J2
+#! Here wpara -> round(wpara, 4)
+
+@param wpara: parameter of functional LC-wPBE
+'''
+def funJ(wpara):
+    global wparaList, J2List, JList, chargeList, chargeSpinList
+    if round(wpara, 4) in wparaList:
+        print(f"f({round(wpara, 4)}) Already calculated.")
+        #print(f"Already calculated.{round(wpara, 4)} {wparaList}")
+        return J2List[wparaList.index(round(wpara, 4))]
+    J, J2 = calIP(wpara)
+    wparaList.append(round(wpara, 4))
+    JList.append(J)
+    J2List.append(J2)
+    return J
+
 '''
 @breif: function for debugging
 @param x: input

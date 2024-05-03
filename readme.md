@@ -30,9 +30,12 @@ xguess:         0.325
 tolerance:      0.001
 clean
 restart
+single point
 ```
 
-Here `oldchk`, `clean`, and `U` in charge spin code area are optional function.
+Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are optional function.
+
+`single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
 `oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
 

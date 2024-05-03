@@ -1,5 +1,5 @@
 #! global variables:
-# chargeList, chargeSpinList, xmin, xmax, xguess, tol, cleanBool, restartBool, oldchkBool, wparaList, J2List, JList, UDFT
+# chargeList, chargeSpinList, xmin, xmax, xguess, tol, cleanBool, restartBool, oldchkBool, singleBool, wparaList, J2List, JList, UDFT
 wparaList = []
 J2List = []
 JList = []
@@ -12,6 +12,7 @@ UDFT = []
 oldchkBool = False
 restartBool = False
 cleanBool = False
+singleBool = False
 
 
 #*************************************************************
@@ -28,7 +29,10 @@ with open("input", "r") as input:
             oldchkBool = True
 
         if "clean" in line:
-            cleanBool = True    
+            cleanBool = True 
+
+        if "single point" in line:
+            singleBool = True   
 
         if "orbit" in line:
             templine = line.strip().split()
