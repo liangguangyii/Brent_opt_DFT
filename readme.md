@@ -33,11 +33,17 @@ restart
 single point
 ```
 
+**I Suggest to choose the original w as xmin, when `olachk` is specified, to save computation time.**
+
 Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are optional function.
 
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
 `oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
+
+`restart` will restart the optimization from the last point of the last optimization, it will read the parameters of the last iteration from `Brent.out`.
+
+`clean` will remove all the backup documents, from `fileList.txt`, it only works when `restart` is not specified.
 
 `orbit`: we could tuned MULTIPLE orbitals, by specifying `orbit:    a,b     f,g     ..      x,y`, that will generate gjf files `N+i.gjf`, where i from a to b, f to g, ..., x to y, and they are sorted automatic, besides, duplicate files are removed in `globalVar.py`. **BE NOTICE that N orbits with continous indies mean that N+1 gjf fiels are needed**
 
@@ -52,11 +58,6 @@ charge spin end
 ```
 
 if `U` is specified, the U method will be used in Gaussian16 for the corresponding `N+i.gjf`.
-
-`restart` will restart the optimization from the last point of the last optimization, it will read the parameters of the last iteration from `Brent.out`.
-
-`clean` will remove all the backup documents, from `fileList.txt`, it only works when `restart` is not specified.
-
 
 Where `N:`, `N+1:`, `N-1:` are the charge+spin multiplicity of systems with corresped electron number. ":" COULD NOT BE OMITTED!
 
