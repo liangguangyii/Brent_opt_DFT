@@ -41,11 +41,11 @@ Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are o
 
 ### helper function
 
-`preprocessing`: It is used to generate gjf files to prepare chks files in the process of tuning w parameter. And when `oldchk` is specified, it will read the chk files with name of `N+i_guess.chk` as initial guess. Besides, the output chk files are named as `N+iS.chk`.
+`preprocessing`: It is used to generate gjf files to prepare chks files in the process of tuning w parameter. And when `oldchk` is specified, it will read the chk files with name of `N+i_guess.chk` as initial guess. Besides, the output chk files are named as `N+i.chk`.
 
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
-## main function
+### main function
 
 `oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
 
