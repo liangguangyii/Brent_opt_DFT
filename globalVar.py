@@ -13,6 +13,7 @@ oldchkBool = False
 restartBool = False
 cleanBool = False
 singleBool = False
+preBool = False
 
 
 #*************************************************************
@@ -33,6 +34,9 @@ with open("input", "r") as input:
 
         if "single point" in line:
             singleBool = True   
+
+        if "preprocessing" in line:
+            preBool = True
 
         if "orbit" in line:
             templine = line.strip().split()

@@ -37,6 +37,12 @@ single point
 
 Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are optional function.
 
+## functions
+
+### helper function
+
+`preprocessing`: It is used to generate gjf files to prepare chks files in the process of tuning w parameter. And when `oldchk` is specified, it will read the chk files with name of `N+i_guess.chk` as initial guess. Besides, the output chk files are named as `N+iS.chk`.
+
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
 `oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
@@ -71,3 +77,6 @@ And `clean` is an optional funciton, it is used to clean all the backup document
 In this file the loss function is calucated. Besides, you could also define your own loss function here, with the format of `def loss(x): return y`.
 
 `calIP` will check the exitcode of Gaussian16, and in `g16read` of `fileIO.py` it will be checked again (wether it's terminated normally).
+
+**New version support the gjf files with IOp, but do place the `functional/basis` part in the front of IOp string,** becasue the code split the command lien by "/" and I assume the first element is functional so that I could add "U" at the biginning of it.
+

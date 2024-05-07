@@ -154,6 +154,68 @@ def g16input(chargeList, chargeSpinList, wpara, filename = "template.gjf"):
 
 
 '''
+@brief: generate gjf with series of spins in different oldchk and chk, for the former calculation
+
+@param chargeList: the number of eletron corresponding to the template file
+@param chargeSpinList: the charge spin list [str1, str2, ...]
+@param filename: the template file name, default is "template.gjf"
+
+@return: fileList: the list of the gjf files
+@return: void, series of gjf files
+'''
+
+def g16input_0(chargeList, chargeSpinList, filename = "template.gjf"):
+    global oldchkBool
+
+
+    fileList = []
+
+    iopIndex, spinIndex = findSpinIndex()
+
+    for i in range(len(chargeSpinList)):
+        icount = 0
+        #* generate the filename
+        if chargeList[i] == 0:
+            tmpstr = "N.gjf"
+        elif chargeList[i] > 0:
+            tmpstr = f"N+{chargeList[i]}.gjf"
+        else:
+            tmpstr = f"N-{abs(chargeList[i])}.gjf"
+
+
+        with open(filename, "r") as gjf:
+            with open(tmpstr, "w") as Ngjf:
+                for line in gjf:
+                    icount += 1
+
+                    #* modify the iop line 
+                    if icount == iopIndex and UDFT[i]:
+                        tempIop = line.strip().split("/")  #*remove the newline character
+                        tempIop1 = tempIop[0].split()
+                        tempIop1[-1] = "U" + tempIop1[-1]
+
+                        ttempstr = "/".join(tempIop[1:])
+                        tmpIop = " ".join(tempIop1) + "/" + ttempstr
+                        Ngjf.write(f"{tmpIop}\n")
+                    
+                    #* if oldchkBool is True, then add the oldchk for each gjf file(by default, is N.chk, N+1.chk, N-1.chk ...)
+                    #* otherwise, oldchk is the same with template.gjf
+                    elif "oldchk" in line and oldchkBool:
+                        Ngjf.write(f"%oldchk={tmpstr[:-4]}_guess.chk\n")
+
+                    elif "chk" in line:
+                        Ngjf.write(f"%chk={tmpstr[:-4]}.chk\n")
+
+                    elif icount == spinIndex:
+                        Ngjf.write(f"{chargeSpinList[i]}\n")
+                    else:
+                        Ngjf.write(line)
+        
+        fileList.append(tmpstr)
+    
+    return fileList
+
+'''
 @brief: read the SCF energy and eigenvalues of HOMO orbital
 
 @param: filename the log file

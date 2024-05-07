@@ -1,4 +1,4 @@
-from globalVar import xmin, xmax, xguess, tol, cleanBool, restartBool, oldchkBool, UDFT, chargeList, chargeSpinList, singleBool
+from globalVar import xmin, xmax, xguess, tol, cleanBool, restartBool, oldchkBool, UDFT, chargeList, chargeSpinList, singleBool, preBool
 from brent import *
 from fileIO import *
 from function import *
@@ -10,6 +10,10 @@ if singleBool:
         finout.write(f"J:\t{J:.12f}\nJ2:\t{J2:.12f}\n")
 #* if calculte single point, then brent won't be executed
 #* only calculate J J2 at xguess
+
+elif preBool:
+    g16input_0(chargeList, chargeSpinList)
+
 else:
     if restartBool:
         xmin, icount = brentMethod_re(funJ2)
