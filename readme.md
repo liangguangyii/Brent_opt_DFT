@@ -45,6 +45,8 @@ Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are o
 
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
+## main function
+
 `oldchk`: add oldchk for each `N+i.gjf` repectively, by default their names are "N+i.chk". Or we could use the same oldchk as `template.gjf` by remove `oldchk`. For both cases, there should be `guess=read` in command line of gjf file.
 
 `restart` will restart the optimization from the last point of the last optimization, it will read the parameters of the last iteration from `Brent.out`.
