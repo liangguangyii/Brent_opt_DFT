@@ -69,7 +69,7 @@ with open("input", "r") as input:
             tmplist1.append(templine[-1])
             tmplist2.append(tmplist1)
 
-            #* sort the charge spin list, by charge
+            #* sort the charge spin list, by charge(i in N+i)
             tmplist2 = sorted(tmplist2, key = lambda x: x[0])
 
         if "xmin" in line:
@@ -84,16 +84,32 @@ with open("input", "r") as input:
         if "tolerance" in line:
             templine = line.strip().split()
             tol = float(templine[-1])
-    
 
-#* check if the charge spin is complete
-if len(tmplist2) != len(chargeList):
-    raise Exception("Error: charge spin is not complete.")
-#* convert the charge spin list to string
-for i in range(len(tmplist2)):
-    tmpstr = f"{tmplist2[i][1]} {tmplist2[i][2]}"
-    if tmplist2[i][-1] == "U":
-        UDFT.append(True)
-    else:
-        UDFT.append(False)
-    chargeSpinList.append(tmpstr)
+
+if preBool:
+    chargeList = []
+    chargeList = [row[0] for row in tmplist2]
+
+    #* sorted based on i in N+i, and if i is the same, then sort based on the spin
+    tmplist2 = sorted(tmplist2, key = lambda x: (x[0], x[2]))
+
+    #* convert the charge spin list to string
+    for i in range(len(tmplist2)):
+        tmpstr = f"{tmplist2[i][1]} {tmplist2[i][2]}"
+        if tmplist2[i][-1] == "U":
+            UDFT.append(True)
+        else:
+            UDFT.append(False)
+        chargeSpinList.append(tmpstr)
+else:
+    #* check if the charge spin is complete(only for non-preBool case)
+    if len(tmplist2) != len(chargeList):
+        raise Exception("Error: charge spin is not matched with the number of orbitals.")
+    #* convert the charge spin list to string
+    for i in range(len(tmplist2)):
+        tmpstr = f"{tmplist2[i][1]} {tmplist2[i][2]}"
+        if tmplist2[i][-1] == "U":
+            UDFT.append(True)
+        else:
+            UDFT.append(False)
+        chargeSpinList.append(tmpstr)

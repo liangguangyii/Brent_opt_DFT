@@ -168,50 +168,79 @@ def g16input_0(chargeList, chargeSpinList, filename = "template.gjf"):
     global oldchkBool
 
 
+    #* count the number of the same element
+    elenum = []
+    elecount = 1
+    oldele = None
+
+    for ele in chargeList:
+        if ele == oldele:
+            elecount += 1
+        else:
+            elenum.append(elecount)
+            elecount = 1
+        
+        oldele = ele
+    
+    #* the last element doesn't append in the loop
+    elenum.append(elecount)
+    #* besides, the first element stems from None, so remove it
+    elenum = elenum[1:]
+
+    chargeList_set = sorted(list(set(chargeList)))
+        
+
+
     fileList = []
 
     iopIndex, spinIndex = findSpinIndex()
 
-    for i in range(len(chargeSpinList)):
-        icount = 0
-        #* generate the filename
-        if chargeList[i] == 0:
-            tmpstr = "N.gjf"
-        elif chargeList[i] > 0:
-            tmpstr = f"N+{chargeList[i]}.gjf"
-        else:
-            tmpstr = f"N-{abs(chargeList[i])}.gjf"
+    indexcount = 0
+
+    for i in range(len(chargeList_set)):
+
+        for j in range(elenum[i]):
+
+            icount = 0
+            #* generate the filename
+            if chargeList_set[i] == 0:
+                tmpstr = f"N_{j}.gjf"
+            elif chargeList_set[i] > 0:
+                tmpstr = f"N+{chargeList_set[i]}_{j}.gjf"
+            else:
+                tmpstr = f"N-{abs(chargeList_set[i])}_{j}.gjf"
 
 
-        with open(filename, "r") as gjf:
-            with open(tmpstr, "w") as Ngjf:
-                for line in gjf:
-                    icount += 1
+            with open(filename, "r") as gjf:
+                with open(tmpstr, "w") as Ngjf:
+                    for line in gjf:
+                        icount += 1
 
-                    #* modify the iop line 
-                    if icount == iopIndex and UDFT[i]:
-                        tempIop = line.strip().split("/")  #*remove the newline character
-                        tempIop1 = tempIop[0].split()
-                        tempIop1[-1] = "U" + tempIop1[-1]
+                        #* modify the iop line 
+                        if icount == iopIndex and UDFT[i]:
+                            tempIop = line.strip().split("/")  #*remove the newline character
+                            tempIop1 = tempIop[0].split()
+                            tempIop1[-1] = "U" + tempIop1[-1]
 
-                        ttempstr = "/".join(tempIop[1:])
-                        tmpIop = " ".join(tempIop1) + "/" + ttempstr
-                        Ngjf.write(f"{tmpIop}\n")
-                    
-                    #* if oldchkBool is True, then add the oldchk for each gjf file(by default, is N.chk, N+1.chk, N-1.chk ...)
-                    #* otherwise, oldchk is the same with template.gjf
-                    elif "oldchk" in line and oldchkBool:
-                        Ngjf.write(f"%oldchk={tmpstr[:-4]}_guess.chk\n")
+                            ttempstr = "/".join(tempIop[1:])
+                            tmpIop = " ".join(tempIop1) + "/" + ttempstr
+                            Ngjf.write(f"{tmpIop}\n")
+                        
+                        #* if oldchkBool is True, then add the oldchk for each gjf file(by default, is N.chk, N+1.chk, N-1.chk ...)
+                        #* otherwise, oldchk is the same with template.gjf
+                        elif f"%oldchk" in line and oldchkBool:
+                            Ngjf.write(f"%oldchk={tmpstr[:-4]}_guess.chk\n")
 
-                    elif "chk" in line:
-                        Ngjf.write(f"%chk={tmpstr[:-4]}.chk\n")
+                        elif f"%chk" in line:
+                            Ngjf.write(f"%chk={tmpstr[:-4]}.chk\n")
 
-                    elif icount == spinIndex:
-                        Ngjf.write(f"{chargeSpinList[i]}\n")
-                    else:
-                        Ngjf.write(line)
-        
-        fileList.append(tmpstr)
+                        elif icount == spinIndex:
+                            Ngjf.write(f"{chargeSpinList[indexcount]}\n")
+                        else:
+                            Ngjf.write(line)
+            
+            fileList.append(tmpstr)
+            indexcount += 1
     
     return fileList
 
