@@ -217,7 +217,7 @@ def g16input_0(chargeList, chargeSpinList, filename = "template.gjf"):
                         icount += 1
 
                         #* modify the iop line 
-                        if icount == iopIndex and UDFT[i]:
+                        if icount == iopIndex and UDFT[indexcount]:
                             tempIop = line.strip().split("/")  #*remove the newline character
                             tempIop1 = tempIop[0].split()
                             tempIop1[-1] = "U" + tempIop1[-1]
