@@ -67,6 +67,8 @@ When `preprocessing` is given in the `input`, the program will not check the len
 
 the `chargeSpinList` are sorted by `i` and `spin`, the sorted indies are also the suffix of the gjf files.
 
+Besides, I suggest do not use `oldchk` in `input`, cause we don't know the exact spin multiplicity of the system at first and it's better to use the chk file of N.gjf.
+
 #### `single point`
 
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
