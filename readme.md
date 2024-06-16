@@ -41,7 +41,33 @@ Here ``single point``, `oldchk`, `clean`, and `U` in charge spin code area are o
 
 ### helper function
 
-`preprocessing`: It is used to generate gjf files to prepare chks files in the process of tuning w parameter. And when `oldchk` is specified, it will read the chk files with name of `N+i_guess.chk` as initial guess. Besides, the output chk files are named as `N+i.chk`.
+#### `preprocessing`
+
+It's used to search for the spin multiplicity of the system with different charges. 
+
+```
+orbit:          -1,1
+charge spin start
+0	0	3   U
+-1	1	4
+-1  1   2
+-1  1   6
+1	-1	4
+1	-1	2
+charge spin end
+xmin:           0.2
+xmax:           0.6
+xguess:         0.325
+tolerance:      0.001
+clean
+preprocessing
+```
+
+When `preprocessing` is given in the `input`, the program will not check the length of `chargeList` and `chargeSpinList`, cause multiple spin multiplicities are given for each charge, besides, the `chargeList` will extend to the length of `chargeSpinList`.
+
+the `chargeSpinList` are sorted by `i` and `spin`, the sorted indies are also the suffix of the gjf files.
+
+#### `single point`
 
 `single point`: calculate the function (J2 and J) for a given x (`xguess`), when `single point` is turned on, brent algorithm, besides with `clean` or other functions related, won't work even if they are specified.
 
