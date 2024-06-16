@@ -81,7 +81,7 @@ Besides, I suggest do not use `oldchk` in `input`, cause we don't know the exact
 
 `clean` will remove all the backup documents, from `fileList.txt`, it only works when `restart` is not specified.
 
-`orbit`: we could tuned MULTIPLE orbitals, by specifying `orbit:    a,b     f,g     ..      x,y`, that will generate gjf files `N+i.gjf`, where i from a to b, f to g, ..., x to y, and they are sorted automatic, besides, duplicate files are removed in `globalVar.py`. **BE NOTICE that N orbits with continous indies mean that N+1 gjf fiels are needed**
+`orbit`: we could tuned MULTIPLE orbitals, by specifying `orbit:    a,b     f,g     ..      x,y`, that will generate gjf files `N+i.gjf`, where i from a to b, f to g, ..., x to y, and they are sorted automatic, besides, duplicate files are removed in `globalVar.py`. **BE NOTICE that N orbits with continous indies mean that N+1 gjf fiels are needed, and there must be in the format of a,b c,b, for example, if you want to input 3 and 5, it should be 3,3 5,5.**
 
 For example, `orbit: 0,1` $\rightarrow$ `N-1.gjf` `N.gjf` `N+1.gjf`, and `orbits: 0,1 4,5`
 $\rightarrow$ `N-1.gjf` `N.gjf` `N+1.gjf` `N+3.gjf` `N+4.gjf` `N+5.gjf`.
